@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="icon" type="image/icon" href="favicon.ico"/>
+    <title>Color Spaces</title>
+</head>
+<body>
+    <h1>Visual Representation of the <u>span</u> of a...</h1>
+
+    <br/>
+    <h2><strong><u>pair</u></strong></h2>
+
+    <p>Consider the linear combination: <strong>a</strong> < <input id="pair-r1" type="text" size="2" class="pair" value="0">, <input id="pair-b1" type="text" size="2" class="pair" value="0">, <input id="pair-g1" type="text" size="2" class="pair" value="0"> > + <strong>b</strong> < <input id="pair-r2" type="text" size="2" class="pair" value="0">, <input id="pair-b2" type="text" size="2" class="pair" value="0">, <input id="pair-g2" type="text" size="2" class="pair" value="0"> > </p>
+
+    <table>
+        <tbody id="pairGrid">
+        </tbody>
+    </table>
+
+    <script>
+        var pairs = [
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+        pairVisualizer();
+        
+        // Update array based on inputs
+        $(".pair").on("input", function() {
+            var vector = 0;
+            var component = 0;
+            $('.pair').each(function() {
+                pairs[vector][component] = Number($(this).val());
+                component += 1;
+
+                if (component == 3 && vector == 0) {
+                    vector = 1;
+                    component = 0;
+                }
+            });
+
+            pairVisualizer();
+        });
+
+        // Actual function to create grid and compute linear combinations 
+        function pairVisualizer() {
+            document.getElementById('pairGrid').innerHTML = "";
+
+            var r = 0;
+            var g = 0;
+            var b = 0;
+
+            var cols = 16; 
+            var rows = 16; 
+
+            var html = ""; 
+
+            for(var a = 0; a <= rows; a++) { 
+                html += '<tr>'; 
+
+                    for(var b = cols; b >= 0; b--) { 
+                        red = ( (a*pairs[0][0])%17 + (b*pairs[1][0])%17 ) % 17
+                        green = ( (a*pairs[0][1])%17 + (b*pairs[1][1])%17 ) % 17
+                        blue = ( (a*pairs[0][2])%17 + (b*pairs[1][2])%17 ) % 17
+
+                        html += '<td style="background-color: rgb(' + red*16 + ', ' + green*16+ ', '  + blue*16 + ');" >' + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '</td>'; 
+                    } 
+
+                html += '</tr>'; 
+            }
+
+            document.getElementById('pairGrid').innerHTML += html;
+        }
+
+    </script>
+
+    <br/>
+    <h2><strong><u>triplet</u></strong></h2>
+
+    <p>Consider the linear combination: <strong>a</strong> < <input id="triplet-r1" type="text" size="2" class="triplet" value="0">, <input id="triplet-b1" type="text" size="2" class="triplet" value="0">, <input id="triplet-g1" type="text" size="2" class="triplet" value="0"> > + <strong>b</strong> < <input id="triplet-r2" type="text" size="2" class="triplet" value="0">, <input id="triplet-b2" type="text" size="2" class="triplet" value="0">, <input id="triplet-g2" type="text" size="2" class="triplet" value="0"> > + <strong>c</strong> < <input id="triplet-r3" type="text" size="2" class="triplet" value="0">, <input id="triplet-b3" type="text" size="2" class="triplet" value="0">, <input id="triplet-g3" type="text" size="2" class="triplet" value="0"> > </p>
+    <input type="range" id="c-slice" name="vol" min="0" max="16" value="8">
+
+    <table>
+        <tbody id="tripletGrid">
+        </tbody>
+    </table>
+
+    <script>
+        var triplets = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+        var c = 8;
+
+        tripletVisualizer();
+        
+        // Update array based on inputs
+        $(".triplet").on("input", function() {
+            var vector = 0;
+            var component = 0;
+            $('.triplet').each(function() {
+                triplets[vector][component] = Number($(this).val());
+                component += 1;
+
+                if (component == 3 && vector == 0) {
+                    vector = 1;
+                    component = 0;
+                } else if (component == 3 && vector == 1) {
+                    vector = 2;
+                    component = 0;
+                }
+            });
+
+            tripletVisualizer();
+        });
+
+        // Update c slice of visualization based on slider range input
+        $("#c-slice").on("input", function() {
+            c = Number(this.value);
+            tripletVisualizer();
+        });
+
+        // Actual function to create grid and compute linear combinations 
+        function tripletVisualizer() {
+            document.getElementById('tripletGrid').innerHTML = "";
+
+            var r = 0;
+            var g = 0;
+            var b = 0;
+
+            var cols = 16; 
+            var rows = 16; 
+
+            var html = ""; 
+
+            for(var a = 0; a <= rows; a++) { 
+                html += '<tr>'; 
+
+                    for(var b = cols; b >= 0; b--) { 
+                        red = ( (a*triplets[0][0])%17 + (b*triplets[1][0])%17 + (c*triplets[2][0])%17 ) % 17
+                        green = ( (a*triplets[0][1])%17 + (b*triplets[1][1])%17 + (c*triplets[2][1])%17 ) % 17
+                        blue = ( (a*triplets[0][2])%17 + (b*triplets[1][2])%17 + (c*triplets[2][2])%17 ) % 17
+
+                        html += '<td style="background-color: rgb(' + red*16 + ', ' + green*16+ ', '  + blue*16 + ');" >' + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '</td>'; 
+                    } 
+
+                html += '</tr>'; 
+            }
+
+            document.getElementById('tripletGrid').innerHTML += html;
+        }
+
+    </script>
+
+    <br/>
+    <h3>Bucknell's First Mathy Art Contest</h3>
+    <h4>David Ionita</h4>
+</body>
+</html>
