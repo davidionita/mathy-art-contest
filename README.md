@@ -1,5 +1,5 @@
 # mathy-art-contest
 
-BUCKNELL's 1ST MATHY ART CONTEST
+BUCKNELL'S 1ST MATHY ART CONTEST
 
 David Ionita
